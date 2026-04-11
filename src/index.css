@@ -1,0 +1,347 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold: #E5B94E;
+  --gold-light: #F5D080;
+  --gold-dark: #8A6B20;
+  --crimson: #C0392B;
+  --crimson-bright: #E74C3C;
+  --green: #27AE60;
+  --blue: #2980B9;
+  --teal: #16A085;
+  --cream: #ECE9E0;
+  --cream-muted: #A89880;
+  --noir-black: #0C0C0E;
+  --noir-deep: #111115;
+  --noir-card: #17171C;
+  --noir-surface: #1E1E25;
+  --noir-border: #2A2A35;
+  --noir-hover: #25252F;
+}
+
+/* ══════════════════════════════════════
+   LIGHT THEME
+══════════════════════════════════════ */
+
+[data-theme="light"] {
+  --noir-black:   #F2F0EB;
+  --noir-deep:    #E8E5DE;
+  --noir-card:    #FFFFFF;
+  --noir-surface: #F5F3EE;
+  --noir-border:  #D5D0C5;
+  --noir-hover:   #ECE9E2;
+  --cream:        #1C1A15;
+  --cream-muted:  #4A4540;
+  --gold:         #C8960C;
+  --gold-light:   #B07A08;
+  --gold-dark:    #8A6B20;
+}
+
+/* ── Base ── */
+[data-theme="light"] body        { background-color: #F2F0EB; color: #1C1A15; }
+[data-theme="light"] .min-h-screen { background-color: #F2F0EB; }
+
+/* ── Text (Tailwind generates hardcoded values — must override) ── */
+[data-theme="light"] .text-white                  { color: #1C1A15 !important; }
+[data-theme="light"] .text-cream-muted            { color: #5A5248 !important; }
+[data-theme="light"] .hover\:text-white:hover     { color: #0A0908 !important; }
+
+/* ── Backgrounds ── */
+[data-theme="light"] .bg-noir-black               { background-color: #F2F0EB !important; }
+[data-theme="light"] .bg-noir-deep                { background-color: #E8E5DE !important; }
+[data-theme="light"] .bg-noir-card                { background-color: #FFFFFF !important; }
+[data-theme="light"] .bg-noir-surface             { background-color: #F5F3EE !important; }
+[data-theme="light"] .bg-noir-hover               { background-color: #ECE9E2 !important; }
+[data-theme="light"] .hover\:bg-noir-hover:hover  { background-color: #E4E1D9 !important; }
+
+/* ── Borders ── */
+[data-theme="light"] .border-noir-border          { border-color: #D5D0C5 !important; }
+[data-theme="light"] .divide-noir-border\/50 > *  { border-color: rgba(213,208,197,0.6) !important; }
+
+/* ── Navbar ── */
+[data-theme="light"] nav {
+  background: rgba(242,240,235,0.96) !important;
+  border-color: #D5D0C5 !important;
+}
+[data-theme="light"] nav .text-white              { color: #1C1A15 !important; }
+[data-theme="light"] nav .text-cream-muted        { color: #5A5248 !important; }
+[data-theme="light"] nav .border-noir-border      { border-color: #C8C3B8 !important; }
+[data-theme="light"] nav .bg-noir-surface         { background-color: #ECEAE3 !important; }
+
+/* ── Sticky tab bar in Profile ── */
+[data-theme="light"] .sticky-tabs {
+  background: rgba(242,240,235,0.97) !important;
+  border-color: #D5D0C5 !important;
+}
+
+/* ── Profile header ── */
+[data-theme="light"] .profile-hero {
+  background: linear-gradient(180deg, #EAE7DF 0%, #E4E1D8 50%, #F2F0EB 100%) !important;
+  border-color: #D5D0C5 !important;
+}
+
+/* ── Cards ── */
+[data-theme="light"] .card            { background: #FFFFFF; border-color: #D5D0C5; }
+[data-theme="light"] .card-hover:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+
+/* ── Buttons ── */
+[data-theme="light"] .btn-ghost       { color: #4A4540 !important; border-color: #C5C0B5 !important; }
+[data-theme="light"] .btn-ghost:hover { border-color: #C8960C !important; color: #8A6B20 !important; background: rgba(200,150,12,0.06) !important; }
+
+/* ── Inputs ── */
+[data-theme="light"] .field           { background: #F5F3EE; border-color: #D5D0C5; color: #1C1A15; }
+[data-theme="light"] .field:focus     { border-color: #C8960C; }
+[data-theme="light"] .field::placeholder { color: #A09888; }
+
+/* ── Table ── */
+[data-theme="light"] thead tr         { border-color: #D5D0C5 !important; background: rgba(213,208,197,0.2) !important; }
+[data-theme="light"] tbody tr         { border-color: rgba(213,208,197,0.5) !important; }
+
+/* ── Label ── */
+[data-theme="light"] .label           { color: #9A9080; }
+
+/* ── Gold text (Tailwind hardcodes values from config, not CSS vars) ── */
+[data-theme="light"] .text-gold               { color: #C8960C !important; }
+[data-theme="light"] .text-gold-light         { color: #9A7008 !important; }
+[data-theme="light"] .text-gold\/70           { color: rgba(138,107,32,0.9) !important; }
+[data-theme="light"] .text-gold\/50           { color: rgba(138,107,32,0.65) !important; }
+
+/* ── Dim text ── */
+[data-theme="light"] .text-cream-dim          { color: #9A8A78 !important; }
+[data-theme="light"] .text-cream-dim\/50      { color: rgba(154,138,120,0.7) !important; }
+[data-theme="light"] .text-cream-dim\/40      { color: rgba(154,138,120,0.55) !important; }
+
+/* ── Phase badge (day) ── */
+[data-theme="light"] .phase-day               { color: #7A5C10 !important; background: rgba(200,150,12,0.1) !important; border-color: rgba(138,107,32,0.3) !important; }
+
+/* ── Chat bubbles ── */
+[data-theme="light"] .bubble-own              { background: rgba(200,150,12,0.13) !important; border-color: rgba(138,107,32,0.3) !important; }
+[data-theme="light"] .bubble-other            { background: #EEEBE4 !important; border-color: #D5D0C5 !important; }
+
+/* ── bg-gold (Tailwind hardcoded) ── */
+[data-theme="light"] .bg-gold                 { background-color: #C8960C !important; }
+
+/* ── border-gold variants ── */
+[data-theme="light"] .border-gold             { border-color: #C8960C !important; }
+[data-theme="light"] .border-gold\/30         { border-color: rgba(138,107,32,0.35) !important; }
+[data-theme="light"] .border-gold\/40         { border-color: rgba(138,107,32,0.4) !important; }
+
+/* ── Light-mode contrast fixes for saturated Tailwind colors ── */
+[data-theme="light"] .text-green-400          { color: #1a7a40 !important; }
+[data-theme="light"] .text-red-400            { color: #c0392b !important; }
+[data-theme="light"] .text-blue-400           { color: #1a6faf !important; }
+[data-theme="light"] .text-teal-400           { color: #0e7a6b !important; }
+
+/* ── Phase night badge (light mode) ── */
+[data-theme="light"] .phase-night             { color: #3a4fa0 !important; background: rgba(58,79,160,0.1) !important; border-color: rgba(58,79,160,0.3) !important; }
+
+/* ── Role pills (light mode tweaks) ── */
+[data-theme="light"] .role-mafia              { color: #c0392b !important; background: rgba(192,57,43,0.1) !important; }
+[data-theme="light"] .role-citizen            { color: #1a7a40 !important; background: rgba(39,174,96,0.1) !important; }
+[data-theme="light"] .role-detective          { color: #1a6faf !important; background: rgba(41,128,185,0.1) !important; }
+[data-theme="light"] .role-doctor             { color: #0e7a6b !important; background: rgba(22,160,133,0.1) !important; }
+
+/* ── hover:text-gold (Tailwind) ── */
+[data-theme="light"] .hover\:text-gold:hover  { color: #8A6B20 !important; }
+[data-theme="light"] .hover\:text-gold-light:hover { color: #9A7008 !important; }
+
+/* ── Scrollbar ── */
+[data-theme="light"] ::-webkit-scrollbar-track { background: #E8E5DE; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: #C5C0B5; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--noir-black);
+  color: var(--cream);
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+html[dir="rtl"] body {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--noir-deep); }
+::-webkit-scrollbar-thumb { background: #333340; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+
+/* ── Cards ── */
+.card {
+  background: var(--noir-card);
+  border: 1px solid var(--noir-border);
+  border-radius: 10px;
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  border-color: rgba(229,185,78,0.3);
+}
+
+/* ── Inputs ── */
+.field {
+  background: var(--noir-surface);
+  border: 1.5px solid var(--noir-border);
+  color: var(--cream);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+.field:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(229,185,78,0.12);
+}
+.field::placeholder { color: #555565; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 10px 20px; border-radius: 8px;
+  font-weight: 600; font-size: 14px; letter-spacing: 0.02em;
+  cursor: pointer; border: none; transition: all 0.2s ease;
+  font-family: inherit;
+}
+.btn-gold {
+  background: linear-gradient(135deg, #C8960C, #E5B94E);
+  color: #0C0C0E;
+}
+.btn-gold:hover { filter: brightness(1.1); box-shadow: 0 4px 20px rgba(229,185,78,0.3); transform: translateY(-1px); }
+.btn-gold:active { transform: translateY(0); }
+
+.btn-ghost {
+  background: transparent;
+  border: 1.5px solid var(--noir-border);
+  color: var(--cream-muted);
+}
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); background: rgba(229,185,78,0.06); }
+
+.btn-danger {
+  background: rgba(192,57,43,0.15);
+  border: 1.5px solid rgba(231,76,60,0.4);
+  color: #E74C3C;
+}
+.btn-danger:hover { background: rgba(192,57,43,0.25); box-shadow: 0 0 16px rgba(231,76,60,0.2); }
+
+/* ── Role pills ── */
+.role-mafia     { background: rgba(192,57,43,0.2);  border: 1px solid rgba(231,76,60,0.5);  color: #FF6B6B; }
+.role-citizen   { background: rgba(39,174,96,0.15); border: 1px solid rgba(39,174,96,0.4);  color: #6EE7A0; }
+.role-detective { background: rgba(41,128,185,0.15);border: 1px solid rgba(41,128,185,0.4); color: #74B9FF; }
+.role-doctor    { background: rgba(22,160,133,0.15);border: 1px solid rgba(22,160,133,0.4); color: #81ECEC; }
+
+/* ── Animations ── */
+@keyframes fadeIn   { from { opacity: 0 } to { opacity: 1 } }
+@keyframes slideUp  { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes slideDown{ from { opacity: 0; transform: translateY(-14px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes glowPulse{ 0%,100% { box-shadow: 0 0 8px rgba(229,185,78,.3) } 50% { box-shadow: 0 0 22px rgba(229,185,78,.7) } }
+@keyframes letterDrop { 0% { opacity:0; transform:translateY(-40px) scale(.8) } 100% { opacity:1; transform:translateY(0) scale(1) } }
+@keyframes shimmer  { 0%,100% { background-position:0% 0 } 50% { background-position:100% 0 } }
+
+.animate-fade-in    { animation: fadeIn 0.4s ease forwards; }
+.animate-slide-up   { animation: slideUp 0.4s ease forwards; }
+.animate-slide-down { animation: slideDown 0.3s ease forwards; }
+.animate-glow       { animation: glowPulse 2s ease-in-out infinite; }
+
+.stagger > * { opacity: 0; animation: slideUp 0.4s ease forwards; }
+.stagger > *:nth-child(1) { animation-delay: 0.05s }
+.stagger > *:nth-child(2) { animation-delay: 0.10s }
+.stagger > *:nth-child(3) { animation-delay: 0.15s }
+.stagger > *:nth-child(4) { animation-delay: 0.20s }
+.stagger > *:nth-child(5) { animation-delay: 0.25s }
+.stagger > *:nth-child(6) { animation-delay: 0.30s }
+.stagger > *:nth-child(7) { animation-delay: 0.35s }
+.stagger > *:nth-child(8) { animation-delay: 0.40s }
+
+/* ── Gold gradient text ── */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #C8960C, #F5D080, #C8960C);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+/* ── Divider ── */
+.divider {
+  width: 48px; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+  margin: 0 auto;
+}
+
+/* ── Chat bubbles ── */
+.bubble-own   { background: rgba(229,185,78,.12); border: 1px solid rgba(229,185,78,.2); border-radius: 12px 12px 2px 12px; }
+.bubble-other { background: var(--noir-surface); border: 1px solid var(--noir-border); border-radius: 12px 12px 12px 2px; }
+[dir="rtl"] .bubble-own   { border-radius: 12px 12px 12px 2px; }
+[dir="rtl"] .bubble-other { border-radius: 12px 12px 2px 12px; }
+
+/* ── Player seat ── */
+.player-seat { position: absolute; transform: translate(-50%, -50%); transition: all 0.3s ease; }
+
+/* ── Phase badge ── */
+.phase-day   { background: rgba(229,185,78,.12); border: 1px solid rgba(229,185,78,.3); color: #F5D080; }
+.phase-night { background: rgba(100,120,255,.12); border: 1px solid rgba(100,120,255,.3); color: #A0B4FF; }
+
+/* ── Range slider ── */
+input[type="range"] { accent-color: var(--gold); }
+
+/* ── Toggle switch ── */
+.toggle-track {
+  width: 40px; height: 22px; border-radius: 999px;
+  transition: background 0.2s;
+  position: relative;
+}
+.toggle-thumb {
+  position: absolute; top: 3px; width: 16px; height: 16px;
+  border-radius: 50%; background: white; box-shadow: 0 1px 4px rgba(0,0,0,.3);
+  transition: all 0.2s;
+}
+
+/* ── Status dots ── */
+.dot-alive { width: 6px; height: 6px; border-radius: 50%; background: #27AE60; }
+.dot-dead  { width: 6px; height: 6px; border-radius: 50%; background: #E74C3C; }
+
+/* ── Modal ── */
+.modal-bg { animation: fadeIn 0.2s ease forwards; }
+.modal-box { animation: slideUp 0.25s ease forwards; }
+
+/* ── Section label ── */
+.label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #6B6B80;
+}
+[dir="rtl"] .label {
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 12px;
+}
+
+/* ── Scrollbar hide (horizontal scroll) ── */
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* ── Line clamp ── */
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ── Stagger extended (for 24+ game cards) ── */
+.stagger > *:nth-child(9)  { animation-delay: 0.45s }
+.stagger > *:nth-child(10) { animation-delay: 0.50s }
+.stagger > *:nth-child(11) { animation-delay: 0.55s }
+.stagger > *:nth-child(12) { animation-delay: 0.60s }
+.stagger > *:nth-child(13) { animation-delay: 0.65s }
+.stagger > *:nth-child(14) { animation-delay: 0.70s }
+.stagger > *:nth-child(15) { animation-delay: 0.75s }
+.stagger > *:nth-child(16) { animation-delay: 0.80s }
+.stagger > *:nth-child(n+17) { animation-delay: 0.85s }
