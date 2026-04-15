@@ -11,7 +11,7 @@ import EditProfile from './pages/EditProfile'
 import Settings from './pages/Settings'
 import { mockProfile } from './data/mockData'
 
-const PAGES_WITH_NAVBAR = ['lobby', 'game', 'profile', 'editProfile', 'settings']
+const PAGES_WITH_NAVBAR = ['lobby', 'profile', 'editProfile', 'settings']
 
 function AppContent() {
   const [page, setPage] = useState('landing')

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useLang } from '../context/LanguageContext'
 
 const ROLE_RING = {
@@ -7,11 +8,17 @@ const ROLE_RING = {
   doctor:    '#1ABC9C',
 }
 
-export default function PlayerSeat({ player, showRole = false, onVote, canVote = false, isNight = false, totalPlayers = 8 }) {
+const GREEN = '#27AE60'
+const GREEN_FAINT = 'rgba(39, 174, 96, 0.22)'
+
+export default function PlayerSeat({ player, showRole = false, onVote, canVote = false, isNight = false, totalPlayers = 8, selectionColor = null }) {
   const { t } = useLang()
+  const [hovered, setHovered] = useState(false)
   const isDead = player.status === 'dead'
-  const ring = ROLE_RING[player.role] || ROLE_RING.citizen
   const clickable = canVote && !isDead && !player.isSelf
+  const isSelected = !!selectionColor
+  const active = !isDead && (isSelected || (clickable && hovered))
+  const roleColor = (showRole || player.isSelf) ? (ROLE_RING[player.role] || ROLE_RING.citizen) : null
 
   // Dynamic sizing based on player count
   const isLarge = totalPlayers <= 8
@@ -42,8 +49,12 @@ export default function PlayerSeat({ player, showRole = false, onVote, canVote =
   const selfDotSize = isLarge ? 'w-3.5 h-3.5' : isMedium ? 'w-3 h-3' : 'w-2.5 h-2.5'
 
   return (
-    <div className={`flex flex-col items-center gap-0.5 transition-all duration-500 ${isDead ? 'opacity-30 scale-90' : ''}`}>
-      <div className="relative">
+    <div className={`flex flex-col items-center gap-0.5 transition-all duration-300 ease-out ${isDead ? 'opacity-30 scale-90' : active ? 'scale-110' : ''}`}>
+      <div
+        className="relative"
+        onMouseEnter={() => clickable && setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
         {/* Vote count badge */}
         {player.votes > 0 && !isDead && (
           <div className={`absolute ${voteSize} rounded-full text-white font-black flex items-center justify-center z-10 animate-slide-down`}
@@ -58,38 +69,25 @@ export default function PlayerSeat({ player, showRole = false, onVote, canVote =
             style={{ background: 'linear-gradient(135deg, #C8960C, #E5B94E)', boxShadow: '0 0 6px rgba(229,185,78,0.5)' }} />
         )}
 
-        {/* Avatar circle */}
+        {/* Avatar circle — green border sits flush on the avatar edge (box-sizing: border-box) */}
         <div
           onClick={() => clickable && onVote?.(player.id)}
           title={clickable ? `${t('vote')}: ${player.name}` : player.name}
-          className={`${avatarSize} rounded-full flex items-center justify-center ${textSize} border-2 transition-all duration-300`}
+          className={`${avatarSize} rounded-full flex items-center justify-center ${textSize} transition-all duration-300 ease-out`}
           style={{
-            borderColor: isDead ? '#333340' : (showRole || player.isSelf) ? ring : isNight ? 'rgba(100,120,255,0.2)' : '#2A2A35',
+            boxSizing: 'border-box',
+            border: `2px solid ${isDead ? '#333340' : active ? GREEN : roleColor || GREEN_FAINT}`,
             boxShadow: isDead
               ? 'none'
-              : clickable
-                ? `0 0 0 3px ${ring}15, 0 0 16px ${ring}20`
-                : player.isSelf
-                  ? `0 0 12px ${ring}30`
-                  : isNight ? '0 0 8px rgba(100,120,255,0.05)' : 'none',
+              : active
+                ? `0 0 14px ${GREEN}99, 0 0 4px ${GREEN}66, inset 0 0 8px ${GREEN}33`
+                : roleColor
+                  ? `0 0 12px ${roleColor}55, inset 0 0 6px ${roleColor}22`
+                  : 'none',
             background: isDead
               ? 'var(--noir-surface)'
               : isNight ? 'rgba(13,13,24,0.9)' : 'var(--noir-surface)',
             cursor: clickable ? 'pointer' : 'default',
-          }}
-          onMouseEnter={e => {
-            if (clickable) {
-              e.currentTarget.style.transform = 'scale(1.18)'
-              e.currentTarget.style.borderColor = ring
-              e.currentTarget.style.boxShadow = `0 0 0 4px ${ring}25, 0 0 20px ${ring}35`
-            }
-          }}
-          onMouseLeave={e => {
-            if (clickable) {
-              e.currentTarget.style.transform = 'scale(1)'
-              e.currentTarget.style.borderColor = isNight ? 'rgba(100,120,255,0.2)' : '#2A2A35'
-              e.currentTarget.style.boxShadow = `0 0 0 3px ${ring}15, 0 0 16px ${ring}20`
-            }
           }}
         >
           {isDead

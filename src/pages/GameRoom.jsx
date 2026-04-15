@@ -98,7 +98,7 @@ function NightActionPanel({ role, target, investigationResult, players, lang, is
   const instructions = {
     mafia:     { icon: '🔫', text: lang === 'ar' ? 'اختر ضحية للقضاء عليها' : 'Choose a target to eliminate',     color: '#E74C3C' },
     detective: { icon: '🔍', text: lang === 'ar' ? 'اختر لاعباً للتحقيق في هويته' : 'Choose a player to investigate', color: '#3498DB' },
-    doctor:    { icon: '💉', text: lang === 'ar' ? 'اختر لاعباً لحمايته' : 'Choose a player to protect',           color: '#1ABC9C' },
+    doctor:    { icon: '🛡️', text: lang === 'ar' ? 'اختر لاعباً لحمايته' : 'Choose a player to protect',           color: '#1ABC9C' },
     citizen:   { icon: '😴', text: lang === 'ar' ? 'انتظر حتى الفجر...' : 'Wait for dawn...',                      color: '#6B6B80' },
   }
 
@@ -380,7 +380,7 @@ function PlayerListItem({ player: p, phase, votedFor, nightTarget, selfRole, onA
   const isVotingPhase = phase === PHASES.DAY_VOTING
   const isNightPhase = phase === PHASES.NIGHT
   const canNightAction = isNightPhase && p.status === 'alive' && !p.isSelf && selfRole !== 'citizen'
-    && (selfRole !== 'mafia' || p.role !== 'mafia')
+    && !nightTarget && (selfRole !== 'mafia' || p.role !== 'mafia')
   const canVote = isVotingPhase && p.status === 'alive' && !p.isSelf && !votedFor
   const clickable = (canVote || canNightAction) && p.status === 'alive'
   const isVoted = votedFor === p.id
@@ -769,6 +769,7 @@ export default function GameRoom({ setPage }) {
     const self = game.getSelf()
     if (!self || self.status !== 'alive' || self.role === 'citizen') return
     if (phase !== PHASES.NIGHT) return
+    if (nightTarget) return
 
     // Mafia can't target fellow mafia
     if (self.role === 'mafia') {
@@ -910,7 +911,7 @@ export default function GameRoom({ setPage }) {
   const mafiaMembers = players.filter(p => p.role === 'mafia')
 
   return (
-    <div className="min-h-screen flex flex-col pt-14 transition-colors duration-700"
+    <div className="min-h-screen flex flex-col transition-colors duration-700"
       style={{ background: isNight ? '#08080F' : isLight ? '#F2F0EB' : '#0C0C0E' }}>
 
       {/* Night atmospheric overlay */}
@@ -952,7 +953,7 @@ export default function GameRoom({ setPage }) {
       )}
 
       {/* ── Top Bar ── */}
-      <div className="sticky-tabs sticky top-14 z-30 border-b border-noir-border"
+      <div className="sticky-tabs sticky top-0 z-30 border-b border-noir-border"
         style={{ background: isLight ? 'rgba(242,240,235,0.97)' : 'rgba(12,12,14,0.95)', backdropFilter: 'blur(16px)' }}>
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2">
 
@@ -1039,7 +1040,7 @@ export default function GameRoom({ setPage }) {
 
         {/* Players sidebar (desktop) */}
         <aside className="hidden md:flex flex-col w-48 xl:w-56 border-e border-noir-border shrink-0"
-          style={{ height: 'calc(100vh - 7.5rem)', background: isLight ? 'rgba(242,240,235,0.6)' : 'rgba(12,12,14,0.4)' }}>
+          style={{ height: 'calc(100vh - 4rem)', background: isLight ? 'rgba(242,240,235,0.6)' : 'rgba(12,12,14,0.4)' }}>
           <PlayerList players={players} phase={phase} votedFor={votedFor}
             nightTarget={nightTarget} selfRole={selfRole} onAction={handlePlayerAction}
             t={t} lang={lang} isLight={isLight} isNight={isNight} />
@@ -1163,31 +1164,16 @@ export default function GameRoom({ setPage }) {
               {players.map((p, i) => {
                 const pos = getPos(i, players.length, 43)
                 const canAct = canTableAction(p)
-                const isSelected = nightTarget === p.id || votedFor === p.id
-                const isGreenRing = isNight && nightTarget === p.id && (selfRole === 'detective' || selfRole === 'doctor')
+                const selectionColor = (nightTarget === p.id || votedFor === p.id) ? '#27AE60' : null
 
                 return (
                   <div key={p.id} className="player-seat" style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
                     onClick={() => canAct && handlePlayerAction(p.id)}>
-                    <div className="relative">
-                      {/* Green selection ring — visible only to Detective / Doctor */}
-                      {isGreenRing && (
-                        <div className="absolute inset-[-6px] rounded-full pointer-events-none animate-fade-in"
-                          style={{
-                            border: '2.5px solid rgba(39,174,96,0.8)',
-                            boxShadow: '0 0 12px rgba(39,174,96,0.4), inset 0 0 8px rgba(39,174,96,0.1)',
-                          }} />
-                      )}
-                    <div className={`transition-all duration-300 ${isSelected ? 'scale-110' : ''}`}
-                      style={isSelected && !isGreenRing ? {
-                        filter: `drop-shadow(0 0 8px ${phase === PHASES.NIGHT ? '#E5B94E' : '#E74C3C'}80)`,
-                      } : {}}>
+                    <div className="transition-all duration-300">
                       <PlayerSeat
                         totalPlayers={players.length}
                         player={{
                           ...p,
-                          // Mask role so ring/glow colors don't leak identity
-                          // Only reveal to: self, mafia seeing fellow mafia at night, game over
                           role: p.isSelf || phase === PHASES.GAME_OVER
                             || (isNight && selfRole === 'mafia' && p.role === 'mafia')
                             ? p.role : 'citizen',
@@ -1199,8 +1185,8 @@ export default function GameRoom({ setPage }) {
                         onVote={canAct ? handlePlayerAction : undefined}
                         canVote={canAct}
                         isNight={isNight}
+                        selectionColor={selectionColor}
                       />
-                    </div>
                     </div>
                   </div>
                 )
@@ -1274,7 +1260,7 @@ export default function GameRoom({ setPage }) {
 
         {/* Chat sidebar (desktop) */}
         <aside className="hidden lg:flex flex-col w-64 xl:w-72 border-s border-noir-border shrink-0"
-          style={{ height: 'calc(100vh - 7.5rem)', background: isLight ? 'rgba(242,240,235,0.6)' : 'rgba(12,12,14,0.4)' }}>
+          style={{ height: 'calc(100vh - 4rem)', background: isLight ? 'rgba(242,240,235,0.6)' : 'rgba(12,12,14,0.4)' }}>
           {showMafiaChat ? (
             <MafiaChat key={`mafia-desk-${round}`} mafiaMembers={mafiaMembers} allPlayers={players} className="h-full" lang={lang} />
           ) : (
