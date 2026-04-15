@@ -3,7 +3,6 @@ name: Deploy Vite Site to Pages
 on:
   push:
     branches: ["main"]
-  # يسمح لك بتشغيل الـ Action يدوياً من تبويب Actions
   workflow_dispatch:
 
 permissions:
@@ -11,7 +10,7 @@ permissions:
   pages: write
   id-token: write
 
-# يضمن تشغيل مهمة واحدة فقط في كل مرة لمنع تداخل الـ Artifacts
+# هذا الجزء هو الحل الجذري: يمنع تداخل العمليات ويحذف المهام القديمة فوراً
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -23,25 +22,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci # أفضل من install في البيئات المؤتمتة لضمان استقرار الإصدارات
 
       - name: Build
         run: npm run build
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # تأكد أن مجلد المخرجات في مشروعك هو فعلاً dist
           path: './dist'
 
   deploy:
