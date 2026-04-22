@@ -299,9 +299,9 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Space for mobile bottom tab bar */
+/* Space for mobile bottom tab bar — only when navbar (with .gn-btm) is rendered */
 @media(max-width:767px) {
-  main {
+  body:has(.gn-btm) main {
     padding-bottom: 55px;
   }
 }
@@ -2538,7 +2538,7 @@ input[type="range"] {
 /* Mobile: cancel global main padding-bottom for chat page only,
    and switch shell to flex so the visible pane fills the screen. */
 @media (max-width: 767px) {
-  main:has(.ch-page) {
+  body:has(.ch-page) main {
     padding-bottom: 0;
   }
 
