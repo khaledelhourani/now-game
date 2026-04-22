@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useLang } from '../context/LanguageContext'
 import { useTheme } from '../context/ThemeContext'
 import { mockGameHistory, mockAchievements } from '../data/mockData'
+import AddFriendButton from '../components/AddFriendButton'
 
 function StatCard({ icon, value, label }) {
   return (
@@ -44,16 +45,26 @@ export default function Profile({ setPage, profile }) {
   const { theme } = useTheme()
   const isLight = theme === 'light'
   const [tab, setTab] = useState('stats')
+  const [friendStatus, setFriendStatus] = useState('none') // none | sent | friends — demo on profile
 
-  const [privacy, setPrivacy] = useState({
-    showOnline: true,
-    showHistory: true,
-    showAchievements: false,
+  const [privacy, _setPrivacy] = useState(() => {
+    try { const v = localStorage.getItem('mafia_privacy'); return v ? JSON.parse(v) : { showOnline: true, showHistory: true, showAchievements: false } }
+    catch { return { showOnline: true, showHistory: true, showAchievements: false } }
   })
-  const [notifs, setNotifs] = useState({
-    email: true,
-    gameInvites: true,
-    friendRequests: true,
+  const setPrivacy = (fn) => _setPrivacy(prev => {
+    const next = typeof fn === 'function' ? fn(prev) : fn
+    localStorage.setItem('mafia_privacy', JSON.stringify(next))
+    return next
+  })
+
+  const [notifs, _setNotifs] = useState(() => {
+    try { const v = localStorage.getItem('mafia_notifs'); return v ? JSON.parse(v) : { email: true, gameInvites: true, friendRequests: true } }
+    catch { return { email: true, gameInvites: true, friendRequests: true } }
+  })
+  const setNotifs = (fn) => _setNotifs(prev => {
+    const next = typeof fn === 'function' ? fn(prev) : fn
+    localStorage.setItem('mafia_notifs', JSON.stringify(next))
+    return next
   })
 
   const xpPct = (profile.xp / profile.xpNext) * 100
@@ -65,7 +76,7 @@ export default function Profile({ setPage, profile }) {
   ]
 
   return (
-    <div className="min-h-screen bg-noir-black pt-14">
+    <div className="min-h-screen bg-noir-black pt-[63px]">
       {/* Profile header */}
       <div className="profile-hero border-b border-noir-border bg-noir-deep">
         <div className="max-w-4xl mx-auto px-4 py-8">
@@ -117,9 +128,18 @@ export default function Profile({ setPage, profile }) {
                 </div>
               </div>
 
-              <button onClick={() => setPage('editProfile')} className="btn btn-ghost px-5 py-2 text-sm">
-                ✏️ {t('editProfile')}
-              </button>
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                <button onClick={() => setPage('editProfile')} className="btn btn-ghost px-5 py-2 text-sm">
+                  ✏️ {t('editProfile')}
+                </button>
+                <AddFriendButton
+                  status={friendStatus}
+                  size="sm"
+                  onAdd={() => setFriendStatus('sent')}
+                  onCancel={() => setFriendStatus('none')}
+                  onRemove={() => setFriendStatus('none')}
+                />
+              </div>
             </div>
 
             {/* Win rate */}

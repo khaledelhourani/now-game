@@ -88,35 +88,35 @@ function SelectRow({ label, sublabel, options, value, onChange }) {
 }
 
 /* ── main ── */
+const SOUND_DEFAULTS = { effects: true, music: false, volume: 70, musicVolume: 40 }
+const GAMEPLAY_DEFAULTS = { autoReady: false, confirmVote: true, showRoleAfterDeath: true, showChatDefault: true, showPlayerCount: true, animations: true }
+
+function loadJSON(key, fallback) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback }
+  catch { return fallback }
+}
+
 export default function Settings({ setPage }) {
   const { t, lang, toggleLang } = useLang()
   const { theme, setTheme } = useTheme()
 
-  const [sound, setSound] = useState({
-    effects: true,
-    music: false,
-    volume: 70,
-    musicVolume: 40,
+  const [sound, _setSound] = useState(() => loadJSON('mafia_sound', SOUND_DEFAULTS))
+  const [gameplay, _setGameplay] = useState(() => loadJSON('mafia_gameplay', GAMEPLAY_DEFAULTS))
+
+  const setSound = (fn) => _setSound(prev => {
+    const next = typeof fn === 'function' ? fn(prev) : fn
+    localStorage.setItem('mafia_sound', JSON.stringify(next))
+    return next
   })
 
-  const [gameplay, setGameplay] = useState({
-    autoReady: false,
-    confirmVote: true,
-    showRoleAfterDeath: true,
-    showChatDefault: true,
-    showPlayerCount: true,
-    animations: true,
+  const setGameplay = (fn) => _setGameplay(prev => {
+    const next = typeof fn === 'function' ? fn(prev) : fn
+    localStorage.setItem('mafia_gameplay', JSON.stringify(next))
+    return next
   })
-
-  const [saved, setSaved] = useState(false)
-
-  const handleSave = () => {
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
-  }
 
   return (
-    <div className="min-h-screen pt-14" style={{ background: 'var(--noir-black)' }}>
+    <div className="min-h-screen pt-[63px]" style={{ background: 'var(--noir-black)' }}>
       <div className="max-w-2xl mx-auto px-4 py-8">
 
         {/* Header */}
@@ -288,8 +288,8 @@ export default function Settings({ setPage }) {
               <button
                 onClick={() => {
                   setTheme('dark')
-                  setSound({ effects: true, music: false, volume: 70, musicVolume: 40 })
-                  setGameplay({ autoReady: false, confirmVote: true, showRoleAfterDeath: true, showChatDefault: true, showPlayerCount: true, animations: true })
+                  setSound(SOUND_DEFAULTS)
+                  setGameplay(GAMEPLAY_DEFAULTS)
                 }}
                 className="btn btn-danger px-5 py-2 text-sm w-full sm:w-auto"
               >
@@ -300,20 +300,9 @@ export default function Settings({ setPage }) {
 
         </div>
 
-        {/* Save bar */}
-        <div className="sticky bottom-4 mt-6">
-          <div
-            className="card px-5 py-3.5 flex items-center justify-between"
-            style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}
-          >
-            <span className="text-sm text-cream-dim">{t('settingsAutoSave')}</span>
-            <button
-              onClick={handleSave}
-              className="btn btn-gold px-6 py-2 text-sm"
-            >
-              {saved ? `✓ ${t('saved')}` : t('saveChanges')}
-            </button>
-          </div>
+        {/* Auto-save notice */}
+        <div className="mt-6 text-center">
+          <span className="text-sm text-cream-dim">✓ {t('settingsAutoSave')}</span>
         </div>
 
       </div>

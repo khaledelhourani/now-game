@@ -105,9 +105,9 @@ export default function Lobby({ setPage }) {
   ]
 
   return (
-    <div className="min-h-screen bg-noir-black pt-14">
+    <div className="min-h-screen bg-noir-black">
       {/* Header */}
-      <div className="border-b border-noir-border bg-noir-deep">
+      <div className="border-b border-noir-border bg-noir-deep pt-[63px]">
         <div className="max-w-7xl mx-auto px-4 py-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
             <div>
@@ -134,10 +134,10 @@ export default function Lobby({ setPage }) {
             </div>
 
             {/* Filters */}
-            <div className="flex gap-1 p-1 rounded-xl" style={{ background: 'var(--noir-surface)' }}>
+            <div className="flex gap-1 p-1 rounded-xl w-full sm:w-auto" style={{ background: 'var(--noir-surface)' }}>
               {filters.map(f => (
                 <button key={f.key} onClick={() => setFilter(f.key)}
-                  className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all
+                  className={`flex-1 sm:flex-none px-3 sm:px-4 py-1.5 rounded-lg text-sm font-medium transition-all
                     ${filter === f.key ? 'bg-noir-card text-white shadow-sm' : 'text-cream-muted hover:text-white'}`}>
                   {f.label}
                 </button>

@@ -365,7 +365,7 @@ export default function Landing({ setPage }) {
 
       <footer className="border-t border-noir-border py-5 px-6 text-center">
         <span className="text-xs text-cream-dim">
-          {lang === 'ar' ? '© 2024 لعبة المافيا — جميع الحقوق محفوظة' : '© 2024 MAFIA Game — All rights reserved'}
+          {lang === 'ar' ? '© 2026 لعبة المافيا — جميع الحقوق محفوظة' : '© 2026 MAFIA Game — All rights reserved'}
         </span>
       </footer>
     </div>

@@ -142,6 +142,7 @@ export const mockProfile = {
   displayName: 'Don Vito',
   email: 'don.vito@famiglia.com',
   avatar: '🎩',
+  avatarImage: null,
   level: 17,
   xp: 3420,
   xpNext: 4000,
@@ -162,3 +163,83 @@ export const mockStats = {
   gamesPlayed: 1423,
   roomsOpen: 38,
 }
+
+/* ─────────── Friends ─────────── */
+export const mockFriends = [
+  { id: 101, username: 'Scarface',   avatar: '😈', online: true,  level: 22, rank: 'Boss',        lastSeen: 'now' },
+  { id: 102, username: 'Tommy G.',   avatar: '🔫', online: true,  level: 15, rank: 'Soldier',     lastSeen: 'now' },
+  { id: 103, username: 'Rosa M.',    avatar: '🌹', online: false, level: 18, rank: 'Capo',        lastSeen: '2h ago' },
+  { id: 104, username: 'Luca B.',    avatar: '🎭', online: true,  level: 12, rank: 'Associate',   lastSeen: 'now' },
+  { id: 105, username: 'Connie C.',  avatar: '💎', online: false, level: 9,  rank: 'Rookie',      lastSeen: '1d ago' },
+  { id: 106, username: 'Salvatore',  avatar: '🗡️', online: true,  level: 27, rank: 'Godfather',   lastSeen: 'now' },
+  { id: 107, username: 'Fredo C.',   avatar: '🥃', online: false, level: 11, rank: 'Associate',   lastSeen: '30m ago' },
+  { id: 108, username: 'Alessia',    avatar: '🦋', online: true,  level: 14, rank: 'Soldier',     lastSeen: 'now' },
+]
+
+export const mockFriendRequests = [
+  { id: 201, username: 'Marco P.',   avatar: '🐺', level: 8,  mutuals: 3, sentAt: '5m ago' },
+  { id: 202, username: 'Giovanni',   avatar: '🦅', level: 19, mutuals: 6, sentAt: '1h ago' },
+  { id: 203, username: 'Lucia R.',   avatar: '🔮', level: 13, mutuals: 2, sentAt: '3h ago' },
+  { id: 204, username: 'Sofia V.',   avatar: '👑', level: 24, mutuals: 8, sentAt: 'yesterday' },
+]
+
+export const mockDiscoverPlayers = [
+  { id: 301, username: 'Vincenzo',   avatar: '🎯', level: 16, rank: 'Capo',     relation: 'none' },
+  { id: 302, username: 'Nico T.',    avatar: '🎲', level: 10, rank: 'Associate',relation: 'sent' },
+  { id: 303, username: 'Isabella',   avatar: '🎪', level: 21, rank: 'Boss',     relation: 'friends' },
+  { id: 304, username: 'Roberto',    avatar: '⚡', level: 7,  rank: 'Rookie',   relation: 'none' },
+  { id: 305, username: 'Valentina',  avatar: '🌙', level: 17, rank: 'Capo',     relation: 'none' },
+  { id: 306, username: 'Dante',      avatar: '🐍', level: 25, rank: 'Boss',     relation: 'sent' },
+]
+
+/* ─────────── Chat (private DMs) ─────────── */
+export const mockChats = {
+  101: [
+    { id: 1, text: 'Hey Don! Ready for tonight?',               time: '21:45', isOwn: false },
+    { id: 2, text: 'Always. The family comes first.',           time: '21:46', isOwn: true  },
+    { id: 3, text: 'I heard Tommy was asking about you…',       time: '21:48', isOwn: false },
+    { id: 4, text: 'Let him ask. I have nothing to hide.',      time: '21:49', isOwn: true  },
+    { id: 5, text: 'See you at the docks.',                     time: '21:50', isOwn: false },
+  ],
+  102: [
+    { id: 1, text: 'Did you see the last round? Brutal.',       time: '18:10', isOwn: false },
+    { id: 2, text: 'The detective was too fast.',               time: '18:12', isOwn: true  },
+    { id: 3, text: 'We need better coordination next time.',    time: '18:13', isOwn: false },
+  ],
+  103: [
+    { id: 1, text: 'Good game earlier 💪',                      time: '14:02', isOwn: true  },
+    { id: 2, text: 'Thanks! Your vote saved me 😄',             time: '14:05', isOwn: false },
+  ],
+  104: [
+    { id: 1, text: 'Want to play a private match?',             time: '12:30', isOwn: false },
+    { id: 2, text: 'Sure, create a room.',                      time: '12:31', isOwn: true  },
+    { id: 3, text: 'Done. Check your invites.',                 time: '12:33', isOwn: false },
+  ],
+  105: [
+    { id: 1, text: 'GG last night!',                            time: 'Mon',   isOwn: false },
+  ],
+  106: [
+    { id: 1, text: 'Boss, we need to talk.',                    time: '09:11', isOwn: false },
+    { id: 2, text: 'Later. I am busy.',                         time: '09:15', isOwn: true  },
+  ],
+  107: [
+    { id: 1, text: 'Did you join the new lobby yet?',           time: 'Sun',   isOwn: false },
+  ],
+  108: [
+    { id: 1, text: '🌸 Good morning!',                          time: '08:02', isOwn: false },
+    { id: 2, text: 'Morning 🎩',                                time: '08:05', isOwn: true  },
+    { id: 3, text: 'Playing tonight?',                          time: '08:06', isOwn: false },
+    { id: 4, text: 'Of course. 20:00 sharp.',                   time: '08:07', isOwn: true  },
+  ],
+}
+
+export const mockChatPreviews = [
+  { friendId: 101, lastMessage: 'See you at the docks.',        time: '21:50', unread: 2 },
+  { friendId: 108, lastMessage: 'Of course. 20:00 sharp.',      time: '08:07', unread: 0 },
+  { friendId: 104, lastMessage: 'Done. Check your invites.',    time: '12:33', unread: 1 },
+  { friendId: 102, lastMessage: 'We need better coordination…', time: '18:13', unread: 0 },
+  { friendId: 106, lastMessage: 'Boss, we need to talk.',       time: '09:11', unread: 3 },
+  { friendId: 103, lastMessage: 'Your vote saved me 😄',        time: '14:05', unread: 0 },
+  { friendId: 105, lastMessage: 'GG last night!',               time: 'Mon',   unread: 0 },
+  { friendId: 107, lastMessage: 'Did you join the new lobby?',  time: 'Sun',   unread: 0 },
+]

@@ -50,8 +50,9 @@ function now() {
 /* ═══════════════════════════════════════ */
 
 export default class MafiaGame {
-  constructor(playerData, selfId) {
+  constructor(playerData, selfId, lang = 'en') {
     this.selfId = selfId
+    this.lang = lang
     this.players = playerData.map(p => ({
       id: p.id,
       name: p.name,
@@ -97,7 +98,7 @@ export default class MafiaGame {
   startGame() {
     this.assignRoles()
     this.phase = PHASES.ROLE_REVEAL
-    this._event('🎮', 'Roles have been assigned — check your card!')
+    this._event('🎮', this.lang === 'ar' ? 'تم توزيع الأدوار — تحقق من بطاقتك!' : 'Roles have been assigned — check your card!')
     return this.getSelf()
   }
 
@@ -106,7 +107,7 @@ export default class MafiaGame {
     this.phase = PHASES.NIGHT
     this.nightActions = { mafiaTarget: null, detectiveTarget: null, doctorTarget: null }
     this.investigationResult = null
-    this._event('🌙', `Night ${this.round} — the town sleeps`)
+    this._event('🌙', this.lang === 'ar' ? `الليلة ${this.round} — المدينة تنام` : `Night ${this.round} — the town sleeps`)
   }
 
   /** Player submits a night action. Returns investigation result for detective. */
@@ -154,7 +155,6 @@ export default class MafiaGame {
     }
 
     // AI Detective
-    const selfPlayer = this.getSelf()
     const aiDetective = alive.find(p => p.role === ROLES.DETECTIVE && !p.isSelf)
     if (aiDetective && !this.nightActions.detectiveTarget) {
       const targets = alive.filter(p => p.id !== aiDetective.id)
@@ -183,17 +183,17 @@ export default class MafiaGame {
       if (this.nightActions.doctorTarget === targetId) {
         result.saved = true
         result.savedPlayer = this.players.find(p => p.id === targetId)
-        this._event('💊', `The Doctor saved a life tonight!`)
+        this._event('💊', this.lang === 'ar' ? 'الطبيب أنقذ حياة الليلة!' : 'The Doctor saved a life tonight!')
       } else {
         const victim = this.players.find(p => p.id === targetId)
         if (victim && victim.status === 'alive') {
           victim.status = 'dead'
           result.killed = victim
-          this._event('💀', `${victim.name} was eliminated by the Mafia`)
+          this._event('💀', this.lang === 'ar' ? `${victim.name} تم القضاء عليه من المافيا` : `${victim.name} was eliminated by the Mafia`)
         }
       }
     } else {
-      this._event('🌙', 'A quiet night — nobody was targeted')
+      this._event('🌙', this.lang === 'ar' ? 'ليلة هادئة — لم يُستهدف أحد' : 'A quiet night — nobody was targeted')
     }
 
     this.lastDoctorTarget = this.nightActions.doctorTarget
@@ -205,13 +205,13 @@ export default class MafiaGame {
   startDayDiscussion() {
     this.phase = PHASES.DAY_DISCUSSION
     this._resetVotes()
-    this._event('☀️', `Day ${this.round} — discuss and find the Mafia`)
+    this._event('☀️', this.lang === 'ar' ? `النهار ${this.round} — ناقش واكشف المافيا` : `Day ${this.round} — discuss and find the Mafia`)
   }
 
   startVoting() {
     this.phase = PHASES.DAY_VOTING
     this._resetVotes()
-    this._event('🗳️', 'Voting has begun — choose wisely')
+    this._event('🗳️', this.lang === 'ar' ? 'بدأ التصويت — اختر بحكمة' : 'Voting has begun — choose wisely')
   }
 
   castVote(voterId, targetId) {
@@ -260,14 +260,18 @@ export default class MafiaGame {
     })
 
     if (tieCount > 1 || maxVotes === 0) {
-      this._event('⚖️', 'Vote tied — nobody was eliminated')
+      this._event('⚖️', this.lang === 'ar' ? 'تعادل في التصويت — لم يُقصَ أحد' : 'Vote tied — nobody was eliminated')
       this.lastVoteResult = { eliminated: null, tie: true }
       return this.lastVoteResult
     }
 
     eliminated.status = 'dead'
-    const roleLabel = eliminated.role === ROLES.MAFIA ? 'Mafia' : 'innocent'
-    this._event('💀', `${eliminated.name} was voted out — they were ${roleLabel}`)
+    const roleLabel = this.lang === 'ar'
+      ? (eliminated.role === ROLES.MAFIA ? 'مافيا' : 'بريئاً')
+      : (eliminated.role === ROLES.MAFIA ? 'Mafia' : 'innocent')
+    this._event('💀', this.lang === 'ar'
+      ? `${eliminated.name} تم إقصاؤه — كان ${roleLabel}`
+      : `${eliminated.name} was voted out — they were ${roleLabel}`)
     this.lastVoteResult = { eliminated, tie: false }
     return this.lastVoteResult
   }
@@ -281,13 +285,13 @@ export default class MafiaGame {
     if (mafiaAlive === 0) {
       this.winner = 'town'
       this.phase = PHASES.GAME_OVER
-      this._event('🏆', 'The Town wins! All Mafia eliminated!')
+      this._event('🏆', this.lang === 'ar' ? 'فاز المدنيون! تم القضاء على كل المافيا!' : 'The Town wins! All Mafia eliminated!')
       return 'town'
     }
     if (mafiaAlive >= townAlive) {
       this.winner = 'mafia'
       this.phase = PHASES.GAME_OVER
-      this._event('🏆', 'The Mafia wins! They control the town!')
+      this._event('🏆', this.lang === 'ar' ? 'فازت المافيا! سيطروا على المدينة!' : 'The Mafia wins! They control the town!')
       return 'mafia'
     }
     return null

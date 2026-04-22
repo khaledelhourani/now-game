@@ -7,10 +7,16 @@ export default function Auth({ setPage }) {
   const [showPass, setShowPass] = useState(false)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({ username: '', email: '', password: '', confirm: '' })
+  const [error, setError] = useState('')
   const set = f => v => setForm(p => ({ ...p, [f]: v }))
 
   const submit = e => {
     e.preventDefault()
+    setError('')
+    if (tab === 'register' && form.password !== form.confirm) {
+      setError(lang === 'ar' ? 'كلمتا المرور غير متطابقتين' : 'Passwords do not match')
+      return
+    }
     setLoading(true)
     setTimeout(() => { setLoading(false); setPage('lobby') }, 1000)
   }
@@ -67,7 +73,7 @@ export default function Auth({ setPage }) {
               <div className="animate-slide-down">
                 <label className="label mb-1.5 block">{t('email')}</label>
                 <input type="email" className="field" placeholder="you@example.com"
-                  value={form.email} onChange={e => set('email')(e.target.value)} />
+                  value={form.email} onChange={e => set('email')(e.target.value)} required />
               </div>
             )}
 
@@ -103,6 +109,10 @@ export default function Auth({ setPage }) {
                   {t('forgotPassword')}
                 </button>
               </div>
+            )}
+
+            {error && (
+              <p className="text-sm text-red-400 text-center py-1">{error}</p>
             )}
 
             <button type="submit" disabled={loading}

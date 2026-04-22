@@ -655,6 +655,7 @@ export default function GameRoom({ setPage }) {
   const [eliminationToast, setEliminationToast] = useState(null)
   const [selfRole, setSelfRole] = useState(null)    // persists after death
   const aiVoteTimers = useRef([])
+  const phaseTimers = useRef([])    // track all setTimeout IDs for cleanup
 
   const sync = useCallback(() => {
     if (gameRef.current) setGs(gameRef.current.snapshot())
@@ -662,9 +663,17 @@ export default function GameRoom({ setPage }) {
 
   /* ── Initialize waiting state ── */
   useEffect(() => {
-    const game = new MafiaGame(PLAYER_POOL, SELF_ID)
+    const game = new MafiaGame(PLAYER_POOL, SELF_ID, lang)
     gameRef.current = game
     sync()
+
+    // Cleanup all timers on unmount
+    return () => {
+      aiVoteTimers.current.forEach(id => clearTimeout(id))
+      phaseTimers.current.forEach(id => clearTimeout(id))
+      aiVoteTimers.current = []
+      phaseTimers.current = []
+    }
   }, [])
 
   const phase = gs?.phase ?? PHASES.WAITING
@@ -705,10 +714,14 @@ export default function GameRoom({ setPage }) {
         handleNightEnd()
         break
 
-      case PHASES.DAY_RESULTS:
-        game.startDayDiscussion()
+      case PHASES.DAY_RESULTS: {
+        const winner = game.checkWinCondition()
+        if (!winner) {
+          game.startDayDiscussion()
+        }
         sync()
         break
+      }
 
       case PHASES.DAY_DISCUSSION:
         game.startVoting()
@@ -738,8 +751,10 @@ export default function GameRoom({ setPage }) {
   /* ── Play again ── */
   const playAgain = () => {
     aiVoteTimers.current.forEach(id => clearTimeout(id))
+    phaseTimers.current.forEach(id => clearTimeout(id))
     aiVoteTimers.current = []
-    const game = new MafiaGame(PLAYER_POOL, SELF_ID)
+    phaseTimers.current = []
+    const game = new MafiaGame(PLAYER_POOL, SELF_ID, lang)
     gameRef.current = game
     setSelfRole(null)
     setRoleHidden(false)
@@ -748,11 +763,12 @@ export default function GameRoom({ setPage }) {
     setEliminationToast(null)
     sync()
     // Auto-start after a brief delay
-    setTimeout(() => {
+    const id = setTimeout(() => {
       const self = game.startGame()
       setSelfRole(self.role)
       setGs(game.snapshot())
     }, 300)
+    phaseTimers.current.push(id)
   }
 
   /* ── Hide role card ── */
@@ -785,20 +801,10 @@ export default function GameRoom({ setPage }) {
   /* ── Resolve night ── */
   const handleNightEnd = () => {
     const game = gameRef.current
-    const result = game.resolveNight()
+    game.resolveNight()
     setNightTarget(null)
     sync()
-
-    // Check win after night kill
-    setTimeout(() => {
-      const winner = game.checkWinCondition()
-      if (winner) {
-        sync()
-      } else {
-        game.startDayDiscussion()
-        sync()
-      }
-    }, PHASE_TIMERS[PHASES.DAY_RESULTS] * 1000)
+    // Timer system handles DAY_RESULTS → DAY_DISCUSSION transition
   }
 
   /* ── Day vote ── */
@@ -839,33 +845,24 @@ export default function GameRoom({ setPage }) {
     const result = game.resolveVotes()
     sync()
 
+    const goToNextPhase = () => {
+      setEliminationToast(null)
+      const winner = game.checkWinCondition()
+      if (!winner) {
+        game.startNight()
+        setNightTarget(null)
+        setVotedFor(null)
+      }
+      sync()
+    }
+
     if (result.eliminated) {
       setEliminationToast(result.eliminated)
-      setTimeout(() => {
-        setEliminationToast(null)
-        const winner = game.checkWinCondition()
-        if (winner) {
-          sync()
-        } else {
-          game.startNight()
-          setNightTarget(null)
-          setVotedFor(null)
-          sync()
-        }
-      }, 3000)
+      const id = setTimeout(goToNextPhase, 3000)
+      phaseTimers.current.push(id)
     } else {
-      // Tie — no elimination, go to night
-      setTimeout(() => {
-        const winner = game.checkWinCondition()
-        if (winner) {
-          sync()
-        } else {
-          game.startNight()
-          setNightTarget(null)
-          setVotedFor(null)
-          sync()
-        }
-      }, 2000)
+      const id = setTimeout(goToNextPhase, 2000)
+      phaseTimers.current.push(id)
     }
   }
 

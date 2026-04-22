@@ -60,7 +60,7 @@ export default function EditProfile({ setPage, profile, onSave }) {
   const hasImage = !!form.avatarImage
 
   return (
-    <div className="min-h-screen bg-noir-black pt-14">
+    <div className="min-h-screen bg-noir-black pt-[63px]">
       <div className="max-w-lg mx-auto px-4 py-8">
 
         {/* Back button */}

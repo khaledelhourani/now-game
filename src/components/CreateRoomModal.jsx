@@ -186,7 +186,7 @@ export default function CreateRoomModal({ isOpen, onClose, onCreate }) {
           <span className="text-sm text-cream-muted">{t('privateRoom')}</span>
           <button type="button" onClick={() => setF('isPrivate', !form.isPrivate)}
             className="toggle-track" style={{ background: form.isPrivate ? 'var(--gold)' : 'var(--noir-border)' }}>
-            <span className="toggle-thumb" style={{ [lang === 'ar' ? 'right' : 'left']: form.isPrivate ? '21px' : '3px' }} />
+            <span className="toggle-thumb" style={{ left: form.isPrivate ? '21px' : '3px' }} />
           </button>
         </div>
 
